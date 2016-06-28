@@ -1,0 +1,12 @@
+vp2:
+  extends:
+    file: ../docker-compose-4-consensus-base.yml
+    service: vpClassic
+  environment:
+    - CORE_PEER_ID=vp2
+    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:30303
+    - CORE_SECURITY_ENROLLID=test_vp2
+    - CORE_SECURITY_ENROLLSECRET=vQelbRvja7cJ
+  external_links:
+    - ca_membersrvc0_1:membersrvc0
+    - vp0_vp0_1:vp0
