@@ -4,11 +4,17 @@ import (
 	"fmt"
 	"strconv"
 	"errors"
+	"net/http"
+	"encoding/json"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
 type SimpleChaincode struct {
+}
+
+type APIResponse struct {
+	Result int
 }
 
 func (cc *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
@@ -27,7 +33,19 @@ func (cc *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args 
 
 func (cc *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Printf("Invoke function called")
-	return nil, nil
+
+	resp, err := http.Get("http://192.168.99.1:3000")
+	if err != nil {
+		return nil, err
+	}
+
+	r := APIResponse{}
+
+	defer resp.Body.Close()
+
+    err = json.NewDecoder(resp.Body).Decode(&r)
+
+	return []byte(strconv.Itoa(r.Result)), err
 }
 
 func (cc *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
