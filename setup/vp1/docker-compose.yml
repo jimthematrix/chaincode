@@ -10,5 +10,3 @@ vp1:
   external_links:
     - ca_membersrvc0_1:membersrvc0
     - vp0_vp0_1:vp0
-  volumes:
-    - /Users/jimzhang/workspace.obc/go/src/github.com/jimthematrix/chaincode/non-deterministic:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/non-deterministic
