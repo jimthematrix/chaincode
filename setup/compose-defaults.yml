@@ -2,7 +2,7 @@ vp:
   image: hyperledger/fabric-peer
   environment:
     - CORE_PEER_ADDRESSAUTODETECT=true
-    - CORE_VM_ENDPOINT=http://127.0.0.1:2375
+    - CORE_VM_ENDPOINT=http://172.17.0.1:2375
     # TODO:  This is currently required due to BUG in variant logic based upon log level.
     - CORE_LOGGING_LEVEL=DEBUG
   # Startup of peer must be delayed to allow membersrvc to come up first
