@@ -17,6 +17,8 @@ type APIResponse struct {
 	Result int
 }
 
+var KEY = "balance"
+
 func (cc *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	var arg int
 	var err error
@@ -26,9 +28,9 @@ func (cc *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args 
 		return nil, errors.New("Expecting an integer value for the init function during chaincode deploy")
 	}
 
-	fmt.Printf("arguments: %a", arg)
+    err = stub.PutState(KEY, []byte(strconv.Itoa(arg)))
 
-	return nil, nil
+	return nil, err
 }
 
 func (cc *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
@@ -48,18 +50,36 @@ func (cc *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, arg
     	return nil, err
     }
 
-    fmt.Println("================\n\n\n\n")
-    fmt.Printf("Result: %v\n\n\n\n", r.Result)
+    fmt.Println("================\n\n")
+    fmt.Printf("Result: %v\n\n", r.Result)
     fmt.Println("================")
 
-    err = stub.PutState("value", []byte(strconv.Itoa(r.Result)))
+	valbytes, err := stub.GetState(KEY)
+	if err != nil {
+		return nil, errors.New("Failed to get state")
+	}
+
+	val, _ := strconv.Atoi(string(valbytes))
+
+    err = stub.PutState(KEY, []byte(strconv.Itoa(val - r.Result)))
 
     return nil, err
 }
 
 func (cc *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-	fmt.Printf("Query function called")
-	return nil, nil
+	valbytes, err := stub.GetState(KEY)
+	if err != nil {
+		jsonResp := "{\"Error\":\"Failed to get state\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	jsonResp := "{\"Name\":\"value\",\"Amount\":\"" + string(valbytes) + "\"}"
+
+    fmt.Println("================\n\n")
+	fmt.Printf("Query Response:%s\n\n", jsonResp)
+    fmt.Println("================")
+
+	return valbytes, nil
 }
 
 func main() {

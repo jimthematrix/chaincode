@@ -2,8 +2,6 @@ vp0:
   extends:
     file: ../docker-compose-4-consensus-base.yml
     service: vpBatch
-  ports:
-    - "5000:5000"
   environment:
     - CORE_PEER_ID=vp0
     - CORE_SECURITY_ENROLLID=test_vp0
