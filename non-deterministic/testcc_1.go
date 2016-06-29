@@ -44,8 +44,17 @@ func (cc *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, arg
 	defer resp.Body.Close()
 
     err = json.NewDecoder(resp.Body).Decode(&r)
+    if err != nil {
+    	return nil, err
+    }
 
-	return []byte(strconv.Itoa(r.Result)), err
+    fmt.Println("================\n\n\n\n")
+    fmt.Printf("Result: %v\n\n\n\n", r.Result)
+    fmt.Println("================")
+
+    err = stub.PutState("value", []byte(strconv.Itoa(r.Result)))
+
+    return nil, err
 }
 
 func (cc *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {

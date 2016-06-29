@@ -4,9 +4,12 @@ vp0:
     service: vpClassic
   ports:
     - "5000:5000"
+    - "30303:30303"
   environment:
     - CORE_PEER_ID=vp0
     - CORE_SECURITY_ENROLLID=test_vp0
     - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT
   external_links:
     - ca_membersrvc0_1:membersrvc0
+  volumes:
+    - /Users/jimzhang/workspace.obc/go/src/github.com/jimthematrix/chaincode/non-deterministic:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/non-deterministic
