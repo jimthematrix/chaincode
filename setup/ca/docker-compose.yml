@@ -1,4 +1,0 @@
-membersrvc0:
-  extends:
-    file: ../compose-defaults.yml
-    service: membersrvc
