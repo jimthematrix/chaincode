@@ -1,0 +1,23 @@
+vpBase:
+  image: hyperledger/fabric-peer
+  environment:
+    - CORE_PEER_ADDRESSAUTODETECT=true
+    - CORE_VM_ENDPOINT=127.0.0.1:2375
+    - CORE_LOGGING_LEVEL=DEBUG
+    - CORE_SECURITY_ENABLED=true
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:50051
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:50051
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:50051
+# PBFT specific settings
+    - CORE_PEER_VALIDATOR_CONSENSUS_PLUGIN=pbft
+    - CORE_PBFT_GENERAL_N=4
+    - CORE_PBFT_GENERAL_K=2 # The checkpoint interval in sequence numbers
+    - CORE_PBFT_GENERAL_TIMEOUT_REQUEST=10s
+    - CORE_PBFT_GENERAL_MODE=batch
+    - CORE_PBFT_GENERAL_BATCHSIZE=1
+  command: peer node start #--oracle-service-url=http://localhost:3010/oracle
+  # Startup of peer must be delayed to allow membersrvc to come up first
+  #command: sh -c "sleep 5; peer node start"
+  #volumes:
+  #  - /home/vagrant/chaincode/non-deterministic:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/non-deterministic
+
